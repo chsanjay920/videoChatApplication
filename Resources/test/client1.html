@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client 1</title>
+</head>
+
+<body>
+    <h1>Client 1</h1>
+    <video id="localVideo" autoplay muted></video>
+    <br>
+    <textarea id="sdpInput" rows="5" cols="50"></textarea>
+    <button id="sendSDP">Send SDP</button>
+
+    <script>
+        let localStream;
+        const localVideo = document.getElementById('localVideo');
+        const sdpInput = document.getElementById('sdpInput');
+        const sendSDPButton = document.getElementById('sendSDP');
+
+        async function start() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                localVideo.srcObject = localStream;
+            } catch (err) {
+                console.error('Error accessing media devices.', err);
+            }
+        }
+
+        start();
+
+        async function sendSDP() {
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            sdpInput.value = JSON.stringify(pc.localDescription);
+        }
+
+        sendSDPButton.addEventListener('click', sendSDP);
+
+        const pc = new RTCPeerConnection();
+
+        pc.addEventListener('track', (event) => {
+            const remoteVideo = document.getElementById('remoteVideo');
+            if (!remoteVideo.srcObject) {
+                remoteVideo.srcObject = event.streams[0];
+            }
+        });
+
+        async function init() {
+            pc.addStream(localStream);
+
+            const offer = await pc.createOffer();
+            await pc.setLocalDescription(offer);
+            sdpInput.value = JSON.stringify(pc.localDescription);
+
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    console.log('New ICE candidate:', event.candidate);
+                }
+            };
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

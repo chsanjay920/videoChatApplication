@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client 2</title>
+</head>
+<body>
+    <h1>Client 2</h1>
+    <video id="remoteVideo" autoplay></video>
+    <br>
+    <textarea id="sdpInput" rows="5" cols="50"></textarea>
+    <button id="receiveSDP">Receive SDP</button>
+    
+    <script>
+        const remoteVideo = document.getElementById('remoteVideo');
+        const sdpInput = document.getElementById('sdpInput');
+        const receiveSDPButton = document.getElementById('receiveSDP');
+
+        async function receiveSDP() {
+            const desc = JSON.parse(sdpInput.value);
+            await pc.setRemoteDescription(new RTCSessionDescription(desc));
+
+            const answer = await pc.createAnswer();
+            await pc.setLocalDescription(answer);
+
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    console.log('New ICE candidate:', event.candidate);
+                }
+            };
+        }
+
+        receiveSDPButton.addEventListener('click', receiveSDP);
+
+        const pc = new RTCPeerConnection();
+
+        pc.addEventListener('track', (event) => {
+            if (!remoteVideo.srcObject) {
+                remoteVideo.srcObject = event.streams[0];
+            }
+        });
+    </script>
+</body>
+</html>
