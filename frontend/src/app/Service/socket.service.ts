@@ -31,8 +31,8 @@ export class SocketService {
       }
     });
     this.webSocket.on('ReceivedAnswer', (Answer) => {
-      console.log('answer received');
       if (this.IsAdmin == 1) {
+        console.log('answer received');
         try {
           this.peerconnection.setRemoteDescription(
             new RTCSessionDescription(JSON.parse(Answer))
@@ -67,7 +67,7 @@ export class SocketService {
   }
 
   async getUserMedia(): Promise<MediaStream[]> {
-    this.IsAdmin = 0;
+    this.IsAdmin = 1;
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: false,
