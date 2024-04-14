@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const Section = require('./models/section');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/mydatabase', {
+mongoose.connect('mongodb+srv://Vaishnavi:Vaishnavi%40Mongo@cluster0.a0db0r4.mongodb.net', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
