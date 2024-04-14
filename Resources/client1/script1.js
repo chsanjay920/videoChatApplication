@@ -17,7 +17,7 @@ let init = async () => {
     document.getElementById("user1").srcObject = localStream;
     document.getElementById("user2").srcObject = remoteStream;
 
-    localStream.getTracks().forEach((track) => {
+    localStream.getTracks().forEach((track) => {    
         pc.addTrack(track, localStream);
     });
 
