@@ -26,11 +26,31 @@ const io = require('socket.io')(process.env.PORT || 4000, {
     }
 });
 
+Client1Sdp = null;
+Answer = null;
 io.on('connection', socket => {
-    socket.on('joined-section', (name) => {
-        console.log("New User Joined Room!" + name);
-        socket.broadcast.emit('NewUserJoined', `New client joined`);
+    // socket.on('joined-section', (name) => {
+    //     console.log("New User Joined Room!" + name);
+    //     socket.broadcast.emit('NewUserJoined', `New client joined`);
+    // });
+    socket.on('OfferCreated',(obj)=>{
+        console.log("client1 sdp received");
+        Client1Sdp = obj;
+        socket.broadcast.emit('ReceiveOffer',Client1Sdp );
+    })
+    socket.on('AnswerCreated',(answer)=>{
+        console.log("answer created");
+        this.Answer = answer;
+        socket.broadcast.emit('ReceivedAnswer',this.Answer);
     });
+    // socket.on('client2Joined',(name)=>{
+    //     console.log(name+" joined");
+    //     socket.broadcast.emit('getClient1Sdp',Client1Sdp );
+    // });
+    // socket.on('acceptsOffer',(Answer)=>{
+    //     console.log("Offer Accepted joined");
+    //     socket.broadcast.emit('getClient2Answer',Answer );
+    // })
 });
 
 app.use(cors()); // Use cors middleware
