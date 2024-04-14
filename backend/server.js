@@ -43,14 +43,14 @@ io.on('connection', socket => {
         this.Answer = answer;
         socket.broadcast.emit('ReceivedAnswer',this.Answer);
     });
-    socket.on('client2Joined',(name)=>{
-        console.log(name+" joined");
-        socket.broadcast.emit('getClient1Sdp',Client1Sdp );
-    });
-    socket.on('acceptsOffer',(Answer)=>{
-        console.log("Offer Accepted joined");
-        socket.broadcast.emit('getClient2Answer',Answer );
-    })
+    // socket.on('client2Joined',(name)=>{
+    //     console.log(name+" joined");
+    //     socket.broadcast.emit('getClient1Sdp',Client1Sdp );
+    // });
+    // socket.on('acceptsOffer',(Answer)=>{
+    //     console.log("Offer Accepted joined");
+    //     socket.broadcast.emit('getClient2Answer',Answer );
+    // })
 });
 
 app.use(cors()); // Use cors middleware
