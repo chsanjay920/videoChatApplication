@@ -24,7 +24,7 @@ export class SocketService {
   SDP1: any;
 
   constructor() {
-    this.webSocket = io('http://localhost:4000/');
+    this.webSocket = io('https://videochatapplication-ovdb.onrender.com/');
     this.webSocket.on('ReceiveOffer', (data) => {
       if (this.IsAdmin == 0) {
         this.createAnswer(data);
